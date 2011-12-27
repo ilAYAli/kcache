@@ -1,0 +1,71 @@
+// By: petter wahlman, http://www.twitter.com/badeip
+//
+// About:
+// Encrypt/decrypt iOS kernelcache
+//
+// Notes: the code is POC, and the syntax sucks.
+//
+// Example usage: (a $ prefix is used to indicate commands that must be executed in a terminal)
+
+$ mkdir -p ~/iphone/ipsw/
+$ cd ~/iphone/ipsw
+$ mv ~/Downloads/iPhone3,1_5.1_9B5117b_Restore.ipsw .
+$ 7z x iPhone3,1_5.0.1_9A405_Restore.ipsw
+$ kcache --in kernelcache.release.n90 --iv 5533d04f6c805307c2f2a573339a6850 --key 0ef7774fea99e988487f92f8765e4678aeefc8a14de40b95ba210955445eff22
+
+// kcache/kernelcache.bin will now contain the decrypted kernelcache image:
+
+$ file kcache/kernelcache.bin 
+kcache/kernelcache.bin: Mach-O executable arm
+
+
+// Example output:
+
+iv:          5533d04f6c805307c2f2a573339a6850
+key:         0ef7774fea99e988487f92f8765e4678aeefc8a14de40b95ba210955445eff22
+in:          kernelcache.release.n90
+wd:          ./kcache
+
+opening:     kernelcache.release.n90
+magic:       Img3
+filesize:    6516484
+contentsize: 6516464
+certarea:    6514360
+filetype:    krnl
+
+0x00000000 0x00000004: TYPE
+0x00000020 0x0063659b: DATA
+0x006365cc 0x00000004: SEPO
+0x006365e8 0x00000038: KBAG
+0x00636634 0x00000038: KBAG
+0x006366b8 0x00000080: SHSH
+0x00636744 0x00000794: CERT
+creating:    ./kcache/kernelcache.data
+
+AES decrypt:(len: 6514075 pad: 11)
+
+plaintext (excerpt):
+        dc e5 5d 51 97 c1 04 0d e4 72 bb 64 36 13 25 2a | ..]Q.....r.d6.%*
+        b4 ab eb 67 a7 55 e6 81 7b 3c 9a 5b ac 99 55 40 | ...g.U..{<.[..U@
+        65 97 f3 a8 c6 bf fc 7c 5b c8 03 56 2b 2c 88 6d | e......|[..V+,.m
+        b3 2b 35 5d 52 89 5d 1b d3 43 77 63 6c 62 a4 46 | .+5]R.]..Cwclb.F
+        b9 39 e4 82 64 e9 7f 49 35 b5 58 95 25 00 e1 1d | .9..d..I5.X.%...
+        f3 aa 31 16 78 65 2c b1 10 d0 b5 9a ed 65 f1 ad | ..1.xe,......e..
+        9b e5 83 af b5 c0 a6 0e c2 79 bb 16 ff c9 f1 5a | .........y.....Z
+        ce 09 1e 16 3e 8f ce ab 95 df 5b 2a 9f 04 ad 87 | ....>.....[*....
+
+decrypted (excerpt):
+        63 6f 6d 70 6c 7a 73 73 5b 4c f0 db 00 b1 f0 00 | complzss[L......
+        00 63 64 1b 00 00 00 00 00 00 00 00 00 00 00 00 | .cd.............
+        00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+        00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+        00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+        00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+        00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+        00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+
+creating:    ./kcache/kernelcache.data.pt
+creating:    ./kcache/kernelcache.hdr
+creating:    ./kcache/kernelcache.lzss
+creating:    ./kcache/kernelcache.bin
+
